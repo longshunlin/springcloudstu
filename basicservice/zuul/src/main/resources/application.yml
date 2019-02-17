@@ -1,0 +1,13 @@
+
+# Zuul
+zuul:
+  routes:
+    test1:
+      path: /test1/**
+      serviceId: test1
+    test2:
+      path: /test2/**
+      serviceId: test2
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000

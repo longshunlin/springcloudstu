@@ -1,0 +1,23 @@
+# Server settings
+server:
+  port: 8770
+# Application
+spring:
+  application:
+    name: test3
+# Eureka
+eureka:
+  instance:
+    # 以IP将本实例注册到注册中心
+    prefer-ip-address: true
+    # Eureka Server的注册表Status显示内容格式
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    # 服务心跳时间间隔，默认为30
+    lease-renewal-interval-in-seconds: 30
+    # 服务过期时间，超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除，默认为90
+    # EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效
+    lease-expiration-duration-in-seconds: 90
+  client:
+    service-url:
+      # 单节点
+      defaultZone: http://localhost:8761/eureka/

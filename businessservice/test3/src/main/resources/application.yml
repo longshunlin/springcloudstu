@@ -1,0 +1,15 @@
+testNum: service-test3
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream # 或者'*'
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000  #修改Hystrix默认超时时间

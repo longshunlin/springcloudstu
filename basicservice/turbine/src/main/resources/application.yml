@@ -1,0 +1,44 @@
+# Server settings
+server:
+  port: 8769
+
+# Application
+spring:
+  application:
+    name: turbine
+
+# Eureka
+eureka:
+  instance:
+    # 以IP将本实例注册到注册中心
+    prefer-ip-address: true
+    # Eureka Server的注册表Status显示内容格式
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    status-page-url: http://${eureka.instance.instance-id}/hystrix
+    # 服务心跳时间间隔，默认为30
+    lease-renewal-interval-in-seconds: 30
+    # 服务过期时间，超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除，默认为90
+    # EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效
+    lease-expiration-duration-in-seconds: 90
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+#      defaultZone: http://peer1:8761/eureka/,http://peer2:8771/eureka/,http://peer3:8781/eureka/
+
+# Turbine
+turbine:
+  aggregator:
+    # 指定聚合哪些集群，多个使用","分割，默认为default。可使用http://.../turbine.stream?cluster={clusterConfig之一}访问
+    cluster-config: default
+#    cluster-config: ABC
+  # 配置Eureka中的serviceId列表，表明监控哪些服务
+  app-config: test1,test2
+  clusterNameExpression: new String("default") #metadata['cluster']
+  # 1. clusterNameExpression指定集群名称，默认表达式appName；此时：turbine.aggregator.clusterConfig需要配置想要监控的应用名称
+  # 2. 当clusterNameExpression: default时，turbine.aggregator.clusterConfig可以不写，因为默认就是default
+  # 3. 当clusterNameExpression: metadata['cluster']时，假设想要监控的应用配置了eureka.instance.metadata-map.cluster: ABC，则需要配置，同时turbine.aggregator.clusterConfig: ABC
+  instanceUrlSuffix: hystrix.stream
+# 安全验证
+#security:
+#  basic:
+#    enabled: false

@@ -1,0 +1,41 @@
+# Server settings
+server:
+  port: 8760
+
+spring:
+  application:
+    name: zuul
+# Eureka注册中心地址
+eureka:
+  instance:
+    # 以IP将本实例注册到注册中心
+    prefer-ip-address: true
+    # Eureka Server的注册表Status显示内容格式:Finchley版本变成这样了：ip-address；Edgware版本是这个：ipAddress
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    status-page-url: http://${eureka.instance.instance-id}
+  client:
+    service-url:
+      # 单节点
+      defaultZone: http://localhost:8761/eureka/
+      # 集群
+#      defaultZone: ${defaultZone:http://peer1:8761/eureka/,http://peer2:8761/eureka/,http://peer3:8761/eureka/}
+
+# 配置中心
+#spring:
+#  cloud:
+#    config:
+#      # 配置文件版本分支
+#      label: master
+#      # 需要加载的配置文件名，按先后顺序加载，后加载的配置文件会覆盖先加载的相同属性
+#      name: redis,rabbitmq,eureka,sleuth,zuul
+#      # 配置文件环境，开发环境：dev，测试环境：test，生产环境：pro
+#      # 开发环境
+#      profile: dev
+#      # 测试环境
+##      profile: ${configProfile:test}
+#      # 配置中心地址，默认地址: http://localhost:8888
+#      uri: http://localhost:8762
+#      # 通过注册中心发现配置中心，会覆盖配置中心uri配置项
+#      discovery:
+#        enabled: true
+#        service-id: config

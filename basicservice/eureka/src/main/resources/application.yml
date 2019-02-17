@@ -1,0 +1,52 @@
+# 服务端口
+server:
+  port: 8761
+#  servlet:
+#    context-path: /eureka
+
+# 服务名
+spring:
+  application:
+    name: eureka
+
+# Eureka
+eureka:
+  # 服务器
+  server:
+    # 关闭自我保护模式
+    enable-self-preservation: false
+    # 启用主动失效，并且每次主动失效检测间隔，默认为0
+    eviction-interval-timer-in-ms: 10000
+    # eureka server刷新readCacheMap间隔，决定了多久会把readWriteCacheMap的缓存更新到readCacheMap上，默认为0
+    response-cache-update-interval-ms: 10000
+#    renewal-percent-threshold: 0.85 #default value
+  # 服务提供方
+  instance:
+    # 单节点
+    hostname: localhost
+    # 集群
+#    hostname: ${hostname:peer1}
+#    hostname: ${hostname:peer2}
+#    hostname: ${hostname:peer3}
+    # 以IP形式将本实例注册到注册中心
+    prefer-ip-address: true
+    # Eureka Server的注册表Status显示内容格式:Finchley版本变成这样了：ip-address；Edgware版本是这个：ipAddress
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    status-page-url: http://${eureka.instance.instance-id}
+    # 服务心跳时间间隔，默认为30
+    lease-renewal-interval-in-seconds: 30
+    # 服务过期时间，超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除，默认为90
+    # EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效
+    lease-expiration-duration-in-seconds: 90
+  # 服务调用方
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}
+    # 单节点
+    register-with-eureka: false
+    fetch-registry: false
+    # 集群
+#    service-url:
+#      defaultZone: ${defaultZone:http://peer2:8761/eureka/,http://peer3:8761/eureka/}
+#      defaultZone: ${defaultZone:http://peer3:8761/eureka/,http://peer1:8761/eureka/}
+#      defaultZone: ${defaultZone:http://peer1:8761/eureka/,http://peer2:8761/eureka/}

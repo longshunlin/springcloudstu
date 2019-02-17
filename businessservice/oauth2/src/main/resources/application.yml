@@ -1,0 +1,37 @@
+# Server settings
+server:
+  port: 8781
+
+spring:
+  application:
+    name: oauth2
+  cloud:
+    refresh:
+      refreshable: none
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/cloud_oauth?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true
+#    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    hibernate:
+      #ddl-auto: create #ddl-auto:设为create表示每次都重新建表
+      ddl-auto: update #ddl-auto:设为update表示每次都不会重新建表
+    show-sql: true
+# Eureka注册中心地址
+eureka:
+  instance:
+    # 以IP将本实例注册到注册中心
+    prefer-ip-address: true
+    # Eureka Server的注册表Status显示内容格式:Finchley版本变成这样了：ip-address；Edgware版本是这个：ipAddress
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    status-page-url: http://${eureka.instance.instance-id}
+  client:
+    service-url:
+      # 单节点
+      defaultZone: http://localhost:8761/eureka/
+#management:
+#  security:
+#    enabled: false
+#  context-path: /mgmt
